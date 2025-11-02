@@ -41,10 +41,12 @@ def mergeSort(array, index):
     return merge(mergeSort(array[:halfArrayLen], index), mergeSort(array[halfArrayLen:], index), index)
 
 
-
+#file setup
 fileMergeByTime = open("TtimeMerSort.txt", "w")
 fileMergeByCost = open("TcostMerSort.txt", "w")
+runTimes = open("runtimes.txt", "w")
 
+#plotting setup
 fig = plt.figure()
 plt.xlabel('City')
 plt.ylabel('Time')
@@ -62,6 +64,8 @@ ax.grid(which='both')
 x = []
 y = []
 
+
+#looping through flights
 for i, line in enumerate(flightsArray):
 
     #merge stuff
@@ -70,17 +74,28 @@ for i, line in enumerate(flightsArray):
 
     fileMergeByCost.write(str(mergeByCost) + "\n")
 
-    startClockTime = time.perf_counter()
+    startClockTimeMerge = time.perf_counter()
     fileMergeByTime.write(str(mergeByTime) + "\n")
-    endClockTime = time.perf_counter()
+    endClockTimeMerge = time.perf_counter()
 
-    y.append(endClockTime-startClockTime)
+    y.append(endClockTimeMerge-startClockTimeMerge)
     x.append(i+1)
 
+    #bubble stuff
 
-    pass
 
+    bubbleRunTimePlaceholder = 0
 
+    #both
+    runTimes.write("(" + str(endClockTimeMerge-startClockTimeMerge) + ", " + str(bubbleRunTimePlaceholder) + ")\n")
+    
+    
+#file closing
+fileMergeByCost.close()
+fileMergeByTime.close()
+runTimes.close()
+
+#plot 
 plt.plot(x, y, label="Merge By Time")
 plt.legend()
 plt.show()
