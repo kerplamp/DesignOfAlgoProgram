@@ -1,6 +1,8 @@
 import math
 import ast
 import time
+import matplotlib.pyplot as plt
+import numpy as np
 
 flightsFile = open("flights.txt")
 flightsArray = []
@@ -43,7 +45,42 @@ def mergeSort(array, index):
 fileMergeByTime = open("TtimeMerSort.txt", "w")
 fileMergeByCost = open("TcostMerSort.txt", "w")
 
+fig = plt.figure()
+plt.xlabel('City')
+plt.ylabel('Time')
+ax = fig.gca()
+
+major_ticks = np.arange(0, 101, 5)
+minor_ticks = np.arange(0, 101, 1)
+
+ax.set_xticks(major_ticks)
+ax.set_xticks(minor_ticks, minor=True)
+ax.set_yticks(major_ticks)
+ax.set_yticks(minor_ticks, minor=True)
+ax.grid(which='both')
+
+x = []
+y = []
+
 for i, line in enumerate(flightsArray):
-    fileMergeByTime.write(str(mergeSort(line, 1)) + "\n")
-    fileMergeByCost.write(str(mergeSort(line, 2)) + "\n")
+
+    #merge stuff
+    mergeByTime = mergeSort(line, 1)
+    mergeByCost = mergeSort(line, 2)
+
+    fileMergeByCost.write(str(mergeByCost) + "\n")
+
+    startClockTime = time.perf_counter()
+    fileMergeByTime.write(str(mergeByTime) + "\n")
+    endClockTime = time.perf_counter()
+
+    y.append(endClockTime-startClockTime)
+    x.append(i+1)
+
+
     pass
+
+
+plt.plot(x, y, label="Merge By Time")
+plt.legend()
+plt.show()
