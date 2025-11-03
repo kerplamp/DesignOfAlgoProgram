@@ -41,9 +41,29 @@ def mergeSort(array, index):
     return merge(mergeSort(array[:halfArrayLen], index), mergeSort(array[halfArrayLen:], index), index)
 
 
+# Bubble Sort
+def bubble(array, index):
+    for i in range(len(array)):
+        swapped = False
+
+        for j in range(len(array)-1):
+            if array[j][index] > array[j+1][index]:
+                array[j], array[j+1] = array[j+1], array[j]
+                swapped = True
+
+        if swapped == False:
+            break
+
+def bubbleSort(array, index):
+    array_copy = array.copy()
+    bubble(array_copy, index)
+    return array_copy
+
 #file setup
 fileMergeByTime = open("TtimeMerSort.txt", "w")
 fileMergeByCost = open("TcostMerSort.txt", "w")
+fileBubbleByTime = open("TtimeBubSort.txt", "w")
+fileBubbleByCost = open("TcostBubSort.txt", "w")
 runTimes = open("runtimes.txt", "w")
 
 #plotting setup
@@ -61,30 +81,43 @@ ax.set_yticks(major_ticks)
 ax.set_yticks(minor_ticks, minor=True)
 ax.grid(which='both')
 
-x = []
-y = []
+mergeX = []
+mergeY = []
+
+bubbleX = []
+bubbleY = []
 
 
 #looping through flights
 for i, line in enumerate(flightsArray):
 
     #merge stuff
+    startClockTimeMerge = time.perf_counter()
     mergeByTime = mergeSort(line, 1)
+    endClockTimeMerge = time.perf_counter()
     mergeByCost = mergeSort(line, 2)
 
     fileMergeByCost.write(str(mergeByCost) + "\n")
-
-    startClockTimeMerge = time.perf_counter()
     fileMergeByTime.write(str(mergeByTime) + "\n")
-    endClockTimeMerge = time.perf_counter()
 
-    y.append(endClockTimeMerge-startClockTimeMerge)
-    x.append(i+1)
+    mergeY.append(endClockTimeMerge-startClockTimeMerge)
+    mergeX.append(i+1)
 
     #bubble stuff
 
+    startClockTimeBubble = time.perf_counter()
+    bubbleByTime = bubbleSort(line, 1)
+    endClockTimeBubble = time.perf_counter()
+    bubbleByCost = bubbleSort(line, 2)
 
-    bubbleRunTimePlaceholder = 0
+    fileBubbleByTime.write(str(bubbleByTime) + "\n")
+    fileBubbleByCost.write(str(bubbleByCost) + "\n")
+
+
+    bubbleRunTimePlaceholder = endClockTimeBubble-startClockTimeBubble
+
+    bubbleY.append(endClockTimeBubble-startClockTimeBubble)
+    bubbleX.append(i+1)
 
     #both
     runTimes.write("(" + str(endClockTimeMerge-startClockTimeMerge) + ", " + str(bubbleRunTimePlaceholder) + ")\n")
@@ -96,6 +129,7 @@ fileMergeByTime.close()
 runTimes.close()
 
 #plot 
-plt.plot(x, y, label="Merge By Time")
+plt.plot(mergeX, mergeY, label="Mergesort By Time")
+plt.plot(bubbleX, bubbleY, label="Bubblesort By Time")
 plt.legend()
 plt.show()
