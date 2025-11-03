@@ -114,13 +114,13 @@ for i, line in enumerate(flightsArray):
     fileBubbleByCost.write(str(bubbleByCost) + "\n")
 
 
-    bubbleRunTimePlaceholder = endClockTimeBubble-startClockTimeBubble
+    bubbleRunTime = endClockTimeBubble-startClockTimeBubble
 
     bubbleY.append(endClockTimeBubble-startClockTimeBubble)
     bubbleX.append(i+1)
 
     #both
-    runTimes.write("(" + str(endClockTimeMerge-startClockTimeMerge) + ", " + str(bubbleRunTimePlaceholder) + ")\n")
+    runTimes.write("(" + str(endClockTimeMerge-startClockTimeMerge) + ", " + str(bubbleRunTime) + ")\n")
     
     
 #file closing
