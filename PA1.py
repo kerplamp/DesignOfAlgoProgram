@@ -1,6 +1,11 @@
+# CSC2400 Design of Algorithms - Project Assignment 1 (Travel Planner)
+# Authors: Dylan Myers, Jackson Young, Joyce Khamis
+# Credit Statement: We did not receive any outside help on this submission.
+
 import math
 import ast
 import time
+import matplotlib.pyplot as plt
 
 flightsFile = open("flights.txt")
 flightsArray = []
@@ -12,7 +17,7 @@ for i, line in enumerate(flightsFile):
 #           flight[i] is cityFlightInfo for city i
 
 
-
+# Merge Sort
 def merge(array1, array2, index):
     i = 0
     j = 0
@@ -47,3 +52,30 @@ for i, line in enumerate(flightsArray):
     fileMergeByTime.write(str(mergeSort(line, 1)) + "\n")
     fileMergeByCost.write(str(mergeSort(line, 2)) + "\n")
     pass
+
+# Bubble Sort
+def bubble(array, index):
+    for i in range(len(array)):
+        swapped = False
+
+        for j in range(len(array)-1):
+            if array[j][index] > array[j+1][index]:
+                array[j], array[j+1] = array[j+1], array[j]
+                swapped = True
+
+        if swapped == False:
+            break
+
+def bubbleSort(array, index):
+    array_copy = array.copy()
+    bubble(array_copy, index)
+    return array_copy
+
+fileBubbleByTime = open("TtimeBubSort.txt", "w")
+fileBubbleByCost = open("TcostBubSort.txt", "w")
+
+for i, line in enumerate(flightsArray):
+    fileBubbleByTime.write(str(bubbleSort(line, 1)) + "\n")
+    fileBubbleByCost.write(str(bubbleSort(line, 2)) + "\n")
+    pass
+
