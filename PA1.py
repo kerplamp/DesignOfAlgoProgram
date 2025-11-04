@@ -1,6 +1,13 @@
+<<<<<<< Updated upstream
 # CSC2400 Design of Algorithms - Project Assignment 1 (Travel Planner)
 # Authors: Dylan Myers, Jackson Young, Joyce Khamis
 # Credit Statement: We did not receive any outside help on this submission.
+=======
+# CSC2400 Design of Algorithms - Travel Planner (Checkpoint 1)
+# Authors: Dylan Myers, Jackson Young, Joyce Khamis
+# Credit Statement: We used the internet to understand how to read files, how to measure clock-time, and how to plot graphs in Python.
+# We did not receive any outside help from TAs or the instructor on this submission.
+>>>>>>> Stashed changes
 
 import math
 import ast
@@ -85,3 +92,39 @@ for i, line in enumerate(flightsArray):
     fileBubbleByCost.write(str(bubbleSort(line, 2)) + "\n")
     pass
 
+<<<<<<< Updated upstream
+=======
+    mergeY.append(endClockTimeMerge-startClockTimeMerge)
+    mergeX.append(i+1)
+
+    #bubble stuff
+
+    startClockTimeBubble = time.perf_counter_ns()
+    bubbleByTime = bubbleSort(line, 1)
+    endClockTimeBubble = time.perf_counter_ns()
+    bubbleByCost = bubbleSort(line, 2)
+
+    fileBubbleByTime.write(str(bubbleByTime) + "\n")
+    fileBubbleByCost.write(str(bubbleByCost) + "\n")
+
+
+    bubbleRunTime = endClockTimeBubble-startClockTimeBubble
+
+    bubbleY.append(endClockTimeBubble-startClockTimeBubble)
+    bubbleX.append(i+1)
+
+    #both
+    runTimes.write("(" + str(bubbleRunTime) + ", " + str(endClockTimeMerge-startClockTimeMerge) + ")\n")
+    
+    
+#file closing
+fileMergeByCost.close()
+fileMergeByTime.close()
+runTimes.close()
+
+#plot 
+plt.plot(mergeX, mergeY, label="Mergesort By Time")
+plt.plot(bubbleX, bubbleY, label="Bubblesort By Time")
+plt.legend()
+plt.show()
+>>>>>>> Stashed changes
