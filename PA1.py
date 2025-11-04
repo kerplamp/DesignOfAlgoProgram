@@ -43,16 +43,6 @@ def mergeSort(array, index):
         return array
     return merge(mergeSort(array[:halfArrayLen], index), mergeSort(array[halfArrayLen:], index), index)
 
-
-
-fileMergeByTime = open("TtimeMerSort.txt", "w")
-fileMergeByCost = open("TcostMerSort.txt", "w")
-
-for i, line in enumerate(flightsArray):
-    fileMergeByTime.write(str(mergeSort(line, 1)) + "\n")
-    fileMergeByCost.write(str(mergeSort(line, 2)) + "\n")
-    pass
-
 # Bubble Sort
 def bubble(array, index):
     for i in range(len(array)):
@@ -71,10 +61,26 @@ def bubbleSort(array, index):
     bubble(array_copy, index)
     return array_copy
 
+
+fileMergeByTime = open("TtimeMerSort.txt", "w")
+fileMergeByCost = open("TcostMerSort.txt", "w")
 fileBubbleByTime = open("TtimeBubSort.txt", "w")
 fileBubbleByCost = open("TcostBubSort.txt", "w")
 
 for i, line in enumerate(flightsArray):
+    start_time_bub = time.perf_counter_ns()
+    sort_time_bub = bubbleSort(line, 1)
+    end_time_bub = time.perf_counter_ns()
+    BubTime = end_time_bub - start_time_bub
+
+    start_cost_bub = time.perf_counter_ns()
+    sort_cost_bub = bubbleSort(line, 2)
+    end_cost_bub = time.perf_counter_ns()
+    CostBubTime = end_cost_bub - start_cost_bub
+
+    start_bub
+    fileMergeByTime.write(str(mergeSort(line, 1)) + "\n")
+    fileMergeByCost.write(str(mergeSort(line, 2)) + "\n")
     fileBubbleByTime.write(str(bubbleSort(line, 1)) + "\n")
     fileBubbleByCost.write(str(bubbleSort(line, 2)) + "\n")
     pass
