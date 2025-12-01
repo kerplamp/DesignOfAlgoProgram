@@ -1,3 +1,8 @@
+# CSC2400 Design of Algorithms - Travel Planner (Checkpoint 1)
+# Authors: Dylan Myers, Jackson Young, Joyce Khamis
+# Credit Statement: We used the internet to understand how to read files, how to measure clock-time, and how to plot graphs in Python.
+# We did not receive any outside help from TAs or the instructor on this submission.
+
 import math
 import ast
 import time
@@ -8,11 +13,12 @@ flightsFile = open("flights.txt")
 flightsArray = []
 for i, line in enumerate(flightsFile):
     flightsArray.append(ast.literal_eval(line))
-# each line is a flight: 
+
+
+# each line is a flight:
 #                                 0                 1                           2
 #           cityFlightInfo = [otherCity, flightTimeToOtherCity (hours), flightCost (USD)]   - technically its (otherCity, flightTimeToOtherCity (hours), flightCost (USD)) but whatever
 #           flight[i] is cityFlightInfo for city i
-
 
 
 def merge(array1, array2, index):
@@ -33,9 +39,9 @@ def merge(array1, array2, index):
     return mergedList
 
 
-#since we are passing an array (A) of arrays/lists (many A') and want to sort by some index in each A', we need an index variable
+# since we are passing an array (A) of arrays/lists (many A') and want to sort by some index in each A', we need an index variable
 def mergeSort(array, index):
-    halfArrayLen = math.floor(len(array)/2)
+    halfArrayLen = math.floor(len(array) / 2)
     if len(array) == 1:
         return array
     return merge(mergeSort(array[:halfArrayLen], index), mergeSort(array[halfArrayLen:], index), index)
@@ -46,27 +52,29 @@ def bubble(array, index):
     for i in range(len(array)):
         swapped = False
 
-        for j in range(len(array)-1):
-            if array[j][index] > array[j+1][index]:
-                array[j], array[j+1] = array[j+1], array[j]
+        for j in range(len(array) - 1):
+            if array[j][index] > array[j + 1][index]:
+                array[j], array[j + 1] = array[j + 1], array[j]
                 swapped = True
 
         if swapped == False:
             break
+
 
 def bubbleSort(array, index):
     array_copy = array.copy()
     bubble(array_copy, index)
     return array_copy
 
-#file setup
+
+# file setup
 fileMergeByTime = open("TtimeMerSort.txt", "w")
 fileMergeByCost = open("TcostMerSort.txt", "w")
 fileBubbleByTime = open("TtimeBubSort.txt", "w")
 fileBubbleByCost = open("TcostBubSort.txt", "w")
 runTimes = open("runtimes.txt", "w")
 
-#plotting setup
+# plotting setup
 fig = plt.figure()
 plt.xlabel('City')
 plt.ylabel('Nanoseconds')
@@ -85,11 +93,9 @@ mergeY = []
 bubbleX = []
 bubbleY = []
 
-
-#looping through flights
+# looping through flights
 for i, line in enumerate(flightsArray):
-
-    #merge stuff
+    # merge stuff
     startClockTimeMerge = time.perf_counter_ns()
     mergeByTime = mergeSort(line, 1)
     endClockTimeMerge = time.perf_counter_ns()
@@ -98,10 +104,10 @@ for i, line in enumerate(flightsArray):
     fileMergeByCost.write(str(mergeByCost) + "\n")
     fileMergeByTime.write(str(mergeByTime) + "\n")
 
-    mergeY.append(endClockTimeMerge-startClockTimeMerge)
-    mergeX.append(i+1)
+    mergeY.append(endClockTimeMerge - startClockTimeMerge)
+    mergeX.append(i + 1)
 
-    #bubble stuff
+    # bubble stuff
 
     startClockTimeBubble = time.perf_counter_ns()
     bubbleByTime = bubbleSort(line, 1)
@@ -111,23 +117,22 @@ for i, line in enumerate(flightsArray):
     fileBubbleByTime.write(str(bubbleByTime) + "\n")
     fileBubbleByCost.write(str(bubbleByCost) + "\n")
 
+    bubbleRunTime = endClockTimeBubble - startClockTimeBubble
 
-    bubbleRunTime = endClockTimeBubble-startClockTimeBubble
+    bubbleY.append(endClockTimeBubble - startClockTimeBubble)
+    bubbleX.append(i + 1)
 
-    bubbleY.append(endClockTimeBubble-startClockTimeBubble)
-    bubbleX.append(i+1)
+    # both
+    runTimes.write("(" + str(bubbleRunTime) + ", " + str(endClockTimeMerge - startClockTimeMerge) + ")\n")
 
-    #both
-    runTimes.write("(" + str(bubbleRunTime) + ", " + str(endClockTimeMerge-startClockTimeMerge) + ")\n")
-    
-    
-#file closing
+# file closing
 fileMergeByCost.close()
 fileMergeByTime.close()
 runTimes.close()
 
-#plot 
+# plot
 plt.plot(mergeX, mergeY, label="Mergesort By Time")
 plt.plot(bubbleX, bubbleY, label="Bubblesort By Time")
 plt.legend()
 plt.show()
+
