@@ -1,11 +1,18 @@
 
 import math
+import time
+import matplotlib.pyplot as pyplot
 
 citiesFile = open("cities.txt")
 citiesArray = []
 for i, line in enumerate(citiesFile):
     splitTxt = line.split()
     citiesArray.append([int(splitTxt[0]), float(splitTxt[1]), float(splitTxt[2])])
+
+#outputs
+bf_output = open("BF-Closest.txt", 'w')
+dc_output= open("DC-Closest.txt", 'w')
+runTimes = open("runtimes.txt", 'w')
 
 #helper func
 def euclidianDistance(coord1, coord2):
@@ -79,7 +86,7 @@ def efficientClosestPair(cityArray):
 def efficientClosestPairRecurse(xSortedArray, ySortedArray):
     #base case (since theres only 3, brute force is fine)
     if len(xSortedArray) <= 3:
-        return bruteForceClosest(xSortedArray, 3)
+        return bruteForceClosest(xSortedArray, len(xSortedArray))
     
 
     xFirstHalf = xSortedArray[:math.ceil(len(xSortedArray)/2)]
@@ -120,18 +127,55 @@ def efficientClosestPairRecurse(xSortedArray, ySortedArray):
     #i dont really fully understand the underlying logic, but some geometric law says the while loop will only run 7 times, so we have (n * O(1)) 
     for i in range(len(stripArray) - 1):
         k = i + 1
-        while k <= len(stripArray)-1 and sqr(stripArray[k][2] - stripArray[i][2]) < minDistSqr:
+        while k <= len(stripArray) - 1 and sqr(stripArray[k][2] - stripArray[i][2]) < minDistSqr:
             yDistSqr = sqr(stripArray[k][2] - stripArray[i][2])
             xDistSqr = sqr(stripArray[k][1] - stripArray[i][1])
+
+            currentDistSqr = xDistSqr + yDistSqr
             minDistSqr = min(xDistSqr + yDistSqr, minDistSqr)
-            closestCities = [stripArray[k][0], stripArray[i][0]]
+            if currentDistSqr < minDistSqr:
+                minDistSqr = currentDistSqr
+                closestCities = [stripArray[k][0], stripArray[i][0]]
             k = k + 1
     return [closestCities, math.sqrt(minDistSqr)]
 
+bf_times, dc_times = [], []
+ind_values = list(range(50, 101)) # for graph
+
+for i in ind_values:
+    subCities = citiesArray[:i]
+
+    # BF Timing
+    startClockBF = time.perf_counter_ns()
+    bfPair, bfDist = bruteForceClosest(subCities, i)
+    endClockBF = time.perf_counter_ns()
+    bfRuntime = endClockBF - startClockBF
+
+    # D&C Timing
+    startClockDC = time.perf_counter_ns()
+    dcPair, dcDist = efficientClosestPair(subCities)
+    endClockDC = time.perf_counter_ns()
+    dcRuntime = endClockDC - startClockDC
+
+    bf_times.append(bfRuntime)
+    dc_times.append(dcRuntime)
+
+    bf_output.write(f"{bfPair[0]} {bfPair[1]} {bfDist:0.6f}\n")
+    dc_output.write(f"{dcPair[0]} {dcPair[1]} {dcDist:0.6f}\n")
+
+    # Runtimes
+    runTimes.write(f"({bfRuntime}, {dcRuntime})\n")
+
+bf_output.close()
+dc_output.close()
+runTimes.close()
 
 
-
-    
-
-print(bruteForceClosest(citiesArray, 100))
-print(efficientClosestPair(citiesArray))
+# Graph Plot
+pyplot.figure(figsize=(10, 6))
+pyplot.plot(ind_values, bf_times, label="Brute Force Time")
+pyplot.plot(ind_values, dc_times, label="Divide & Conquer Time")
+pyplot.xlabel("Number of Cities (i)")
+pyplot.ylabel("Clock time (nanoseconds)")
+pyplot.legend()
+pyplot.show()
