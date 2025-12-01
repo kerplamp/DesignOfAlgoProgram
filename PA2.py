@@ -1,3 +1,7 @@
+# CSC2400 Design of Algorithms - Travel Planner (Checkpoint 2)
+# Authors: Dylan Myers, Jackson Young, Joyce Khamis
+# Credit Statement: We used the internet to understand how to read files, how to measure clock-time, and how to plot graphs in Python.
+# We did not receive any outside help from TAs or the instructor on this submission.
 
 import math
 import time
@@ -171,7 +175,7 @@ dc_output.close()
 runTimes.close()
 
 
-# Graph Plot
+# Graph Plot (praying this works)
 pyplot.figure(figsize=(10, 6))
 pyplot.plot(ind_values, bf_times, label="Brute Force Time")
 pyplot.plot(ind_values, dc_times, label="Divide & Conquer Time")
