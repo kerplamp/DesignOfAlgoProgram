@@ -171,7 +171,7 @@ dc_output.close()
 runTimes.close()
 
 
-# Graph Plot
+# Graph Plot (praying this works)
 pyplot.figure(figsize=(10, 6))
 pyplot.plot(ind_values, bf_times, label="Brute Force Time")
 pyplot.plot(ind_values, dc_times, label="Divide & Conquer Time")
