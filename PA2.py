@@ -1,6 +1,7 @@
 
 import math
 import time
+import matplotlib.pyplot as pyplot
 
 citiesFile = open("cities.txt")
 citiesArray = []
@@ -138,8 +139,10 @@ def efficientClosestPairRecurse(xSortedArray, ySortedArray):
             k = k + 1
     return [closestCities, math.sqrt(minDistSqr)]
 
+bf_times, dc_times = [], []
+ind_values = list(range(50, 101)) # for graph
 
-for i in range(50, 101):
+for i in ind_values:
     subCities = citiesArray[:i]
 
     # BF Timing
@@ -154,6 +157,9 @@ for i in range(50, 101):
     endClockDC = time.perf_counter_ns()
     dcRuntime = endClockDC - startClockDC
 
+    bf_times.append(bfRuntime)
+    dc_times.append(dcRuntime)
+
     bf_output.write(f"{bfPair[0]} {bfPair[1]} {bfDist:0.6f}\n")
     dc_output.write(f"{dcPair[0]} {dcPair[1]} {dcDist:0.6f}\n")
 
@@ -163,3 +169,13 @@ for i in range(50, 101):
 bf_output.close()
 dc_output.close()
 runTimes.close()
+
+
+# Graph Plot
+pyplot.figure(figsize=(10, 6))
+pyplot.plot(ind_values, bf_times, label="Brute Force Time")
+pyplot.plot(ind_values, dc_times, label="Divide & Conquer Time")
+pyplot.xlabel("Number of Cities (i)")
+pyplot.ylabel("Clock time (nanoseconds)")
+pyplot.legend()
+pyplot.show()
