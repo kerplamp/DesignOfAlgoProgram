@@ -69,7 +69,7 @@ runTimes = open("runtimes.txt", "w")
 #plotting setup
 fig = plt.figure()
 plt.xlabel('City')
-plt.ylabel('Time')
+plt.ylabel('Nanoseconds')
 ax = fig.gca()
 
 major_ticks = np.arange(0, 101, 5)
@@ -77,9 +77,7 @@ minor_ticks = np.arange(0, 101, 1)
 
 ax.set_xticks(major_ticks)
 ax.set_xticks(minor_ticks, minor=True)
-ax.set_yticks(major_ticks)
-ax.set_yticks(minor_ticks, minor=True)
-ax.grid(which='both')
+ax.grid(which="both")
 
 mergeX = []
 mergeY = []
@@ -92,9 +90,9 @@ bubbleY = []
 for i, line in enumerate(flightsArray):
 
     #merge stuff
-    startClockTimeMerge = time.perf_counter()
+    startClockTimeMerge = time.perf_counter_ns()
     mergeByTime = mergeSort(line, 1)
-    endClockTimeMerge = time.perf_counter()
+    endClockTimeMerge = time.perf_counter_ns()
     mergeByCost = mergeSort(line, 2)
 
     fileMergeByCost.write(str(mergeByCost) + "\n")
@@ -105,9 +103,9 @@ for i, line in enumerate(flightsArray):
 
     #bubble stuff
 
-    startClockTimeBubble = time.perf_counter()
+    startClockTimeBubble = time.perf_counter_ns()
     bubbleByTime = bubbleSort(line, 1)
-    endClockTimeBubble = time.perf_counter()
+    endClockTimeBubble = time.perf_counter_ns()
     bubbleByCost = bubbleSort(line, 2)
 
     fileBubbleByTime.write(str(bubbleByTime) + "\n")
@@ -120,7 +118,7 @@ for i, line in enumerate(flightsArray):
     bubbleX.append(i+1)
 
     #both
-    runTimes.write("(" + str(endClockTimeMerge-startClockTimeMerge) + ", " + str(bubbleRunTime) + ")\n")
+    runTimes.write("(" + str(bubbleRunTime) + ", " + str(endClockTimeMerge-startClockTimeMerge) + ")\n")
     
     
 #file closing
